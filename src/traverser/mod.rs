@@ -3,7 +3,7 @@ use walkdir::WalkDir;
 use crate::parser::{get_file_ext, get_unsafe_block};
 
 pub fn traverse_dir(dir_name: String) {
-    for entry in WalkDir::new(format!("../{}", dir_name))
+    for entry in WalkDir::new(format!("./{}", dir_name))
         .into_iter()
         .filter_map(Result::ok)
         .filter(|e| !e.file_type().is_dir())
