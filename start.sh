@@ -5,6 +5,7 @@ cargo run build
 cd target/debug
 mv unsafe-finder ../../
 cd ../../
+rm -rf target
 
 # check input file
 if [ ! -f input.txt ]; then
@@ -12,7 +13,7 @@ if [ ! -f input.txt ]; then
   exit 1
 fi
 
-if [! -d output]; then
+if [ ! -d output ]; then
   mkdir output
 fi
 
@@ -25,5 +26,4 @@ do
 done < input.txt
 
 # clean up
-rm -rf target
 rm unsafe-finder
