@@ -16,7 +16,8 @@ pub fn traverse_dir(dir_name: String) {
                 let result = get_unsafe_block(&path);
 
                 if result.len() != 0 {
-                    println!("File path: {}", path.trim_start_matches("../"));
+                    let trimmed_path = path.trim_start_matches("./");
+                    println!("File path: {}", trimmed_path);
                     println!("{}", result);
                 }
             }
