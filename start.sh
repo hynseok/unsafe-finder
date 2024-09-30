@@ -12,12 +12,14 @@ if [ ! -f input.txt ]; then
   exit 1
 fi
 
+mkdir output
+
 while IFS= read -r line
 do
-  folder_name=$(basename -s .git "$line")
+  crate_name=$(basename -s .git "$line")
   git clone $line
-  ./unsafe-finder $folder_name >> output.txt
-  rm -rf $folder_name
+  ./unsafe-finder $crate_name > ./output/"$crate_name.txt"
+  rm -rf $crate_name
 done < input.txt
 
 # clean up
