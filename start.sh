@@ -12,7 +12,9 @@ if [ ! -f input.txt ]; then
   exit 1
 fi
 
-mkdir output
+if [! -d output]; then
+  mkdir output
+fi
 
 while IFS= read -r line
 do
