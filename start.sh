@@ -1,11 +1,13 @@
 #!/bin/bash
 
 # build
-cargo run build
-cd target/debug
-mv unsafe-finder ../../
-cd ../../
-rm -rf target
+if [ ! -f unsafe-finder ]; then
+  cargo run build
+  cd target/debug
+  mv unsafe-finder ../../
+  cd ../../
+  rm -rf target
+fi
 
 # check input file
 if [ ! -f input.txt ]; then
@@ -24,6 +26,3 @@ do
   ./unsafe-finder $crate_name > ./output/"$crate_name.txt"
   rm -rf $crate_name
 done < input.txt
-
-# clean up
-rm unsafe-finder
