@@ -14,6 +14,8 @@ pub fn get_unsafe_block(file_name: &String) -> String {
     f.read_to_string(&mut buf).expect("Error: can not read file");
 
     let mut line_count = 1;
+    let mut f_def = String::new();
+    let mut f_flag = 0;
     let mut found = false;
     let mut stack = Vec::new();
 
@@ -25,6 +27,11 @@ pub fn get_unsafe_block(file_name: &String) -> String {
                         found = true;
                     }
                 }
+                "fn" => {
+                    if f_flag == 0 {
+                        f_flag = 1;
+                    }
+                }
                 _ => {
                     if found {
                         if token.contains('{') {
@@ -34,11 +41,20 @@ pub fn get_unsafe_block(file_name: &String) -> String {
                             stack.pop();
                         }
                     }
+                    if f_flag == 1 {
+                        f_def = token.to_string();
+                        f_flag = 2;
+                    }
                 }
             }
         }
-
+        
         if found {
+            if f_flag == 2 {
+                let f_name: Vec<&str> = f_def.split('(').collect();
+                output.push_str(format!("Function Name: {}\n", f_name[0]).as_str());
+                f_flag = 0;
+            }
             output.push_str(format!("{} | {}\n",line_count, line).as_str());
         }
 
