@@ -14,3 +14,12 @@
 chmod +x start.sh
 ./start.sh
 ```
+
+혹은 직접 빌드 후 사용합니다.
+타겟 프로젝트는 루트 디렉토리 아래에 위치해야합니다.
+```
+cargo build
+
+cargo run {프로젝트 디렉토리명}
+cargo run {프로젝트 디렉토리명} > output.txt
+```
