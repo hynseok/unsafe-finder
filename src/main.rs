@@ -1,6 +1,6 @@
 use std::env;
 
-use unsafe_finder::prelude::traverse_dir;
+use unsafe_finder::prelude::*;
 
 fn main() {
     let args: Vec<String> = env::args().collect();

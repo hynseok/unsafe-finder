@@ -1,12 +1,15 @@
 use std::{fs::File, io::Read};
+use crate::unsafe_table::get_unsafe_table;
 
 pub fn get_file_ext(file_name: &String) -> &str {
     let token: Vec<&str> = file_name.split('.').collect();
     token[token.len() - 1]
 }
 
-pub fn get_unsafe_block(file_name: &String) -> String {
+pub fn get_unsafe_block(file_name: &String) -> (String, Vec<(i32, i32)>) {
     let mut output = String::new();
+    let unsafe_table = get_unsafe_table();
+    let mut candidates: Vec<(i32, i32)> = Vec::new();
 
     let mut f = File::open(file_name).expect("Error: file not found");
 
@@ -20,6 +23,7 @@ pub fn get_unsafe_block(file_name: &String) -> String {
     let mut stack = Vec::new();
 
     for line in buf.split('\n') {
+
         for token in line.split_whitespace() {
             match token {
                 "unsafe" => {
@@ -56,6 +60,20 @@ pub fn get_unsafe_block(file_name: &String) -> String {
                 f_flag = 0;
             }
             output.push_str(format!("{} | {}\n",line_count, line).as_str());
+            
+            let mut line_weight = 0;
+            
+            for token in line.split_whitespace() {
+                let token: Vec<&str> = token.split('(').collect();
+                if token.len() >= 1 {
+                    if unsafe_table.contains_key(token[0]) {
+                        line_weight += unsafe_table[token[0]];
+                    }
+                }
+            }
+            if line_weight != 0 {
+                candidates.push((line_count, line_weight));
+            }
         }
 
         if found && stack.is_empty() {
@@ -66,5 +84,7 @@ pub fn get_unsafe_block(file_name: &String) -> String {
         line_count += 1;
     }
     
-    output
+    candidates.sort_by(|a, b| b.1.cmp(&a.1));
+
+    (output, candidates)
 }
