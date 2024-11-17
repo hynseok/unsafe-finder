@@ -64,10 +64,10 @@ pub fn get_unsafe_block(file_name: &String) -> (String, Vec<(i32, i32)>) {
             let mut line_weight = 0;
             
             for token in line.split_whitespace() {
-                let token: Vec<&str> = token.split('(').collect();
-                if token.len() >= 1 {
-                    if unsafe_table.contains_key(token[0]) {
-                        line_weight += unsafe_table[token[0]];
+                let token_vec: Vec<&str> = token.split('(').collect();
+                if token_vec.len() >= 1 {
+                    if unsafe_table.contains_key(token_vec[0]) {
+                        line_weight += unsafe_table[token_vec[0]];
                     }
                 }
             }

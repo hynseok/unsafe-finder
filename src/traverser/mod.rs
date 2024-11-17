@@ -2,14 +2,14 @@ use walkdir::WalkDir;
 
 use crate::parser::{get_file_ext, get_unsafe_block};
 
-pub struct UnsafeToken {
-    pub file_name: String,
-    pub line: i32,
-    pub weight: i32,
+pub struct UnsafeLine {
+    file_name: String,
+    line: i32,
+    weight: i32,
 }
 
 pub fn traverse_dir(dir_name: String) {
-    let mut output: Vec<UnsafeToken> = Vec::new();
+    let mut output: Vec<UnsafeLine> = Vec::new();
     
     for entry in WalkDir::new(format!("./{}", dir_name))
         .into_iter()
@@ -33,7 +33,7 @@ pub fn traverse_dir(dir_name: String) {
 
                 if res_candidates.len() != 0 {
                     for (line, weight) in res_candidates {
-                        output.push(UnsafeToken {
+                        output.push(UnsafeLine {
                             file_name: f_name.clone(),
                             line,
                             weight,
@@ -46,7 +46,7 @@ pub fn traverse_dir(dir_name: String) {
     }
 
     output.sort_by(|a, b| b.weight.cmp(&a.weight));
-    for token in output {
-        println!("{}:{}", token.file_name, token.line);
+    for line in output {
+        println!("{}:{}", line.file_name, line.line);
     }
 }
