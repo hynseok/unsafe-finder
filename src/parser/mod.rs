@@ -20,7 +20,7 @@ pub fn get_unsafe_block(file_name: &String) -> (String, Vec<(i32, i32)>) {
     let mut f_def = String::new();
     let mut f_flag = 0;
     let mut found = false;
-    let mut stack = Vec::new();
+    let mut block_depth = 0; //stack보단 하나의 정수로 +,-하는게 효율이 좋을것같아 변경했습니다
 
     for line in buf.split('\n') {
 
@@ -39,10 +39,10 @@ pub fn get_unsafe_block(file_name: &String) -> (String, Vec<(i32, i32)>) {
                 _ => {
                     if found {
                         if token.contains('{') {
-                            stack.push('{');
+                            block_depth+=1;
                         }
                         if token.contains('}') {
-                            stack.pop();
+                            block_depth-=1;
                         }
                     }
                     if f_flag == 1 {
@@ -76,7 +76,7 @@ pub fn get_unsafe_block(file_name: &String) -> (String, Vec<(i32, i32)>) {
             }
         }
 
-        if found && stack.is_empty() {
+        if found && block_depth==0 {
             output.push('\n');
             found = false;
         }
