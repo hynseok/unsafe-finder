@@ -1,1 +1,2 @@
 https://github.com/tokio-rs/tokio.git
+https://github.com/solana-labs/solana-program-library
